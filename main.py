@@ -1,21 +1,24 @@
-import cv2
-from utils import pickRandomClusterCenters
-from kmeans import kmeans
-from utils import distanceBetweenPoints
+from time import time
 
+from utils import pickRandomClusterCenters, getInputImageMatrix, saveOutputImage
+from kmeans import kmeans
+
+NAME_OF_INPUT_IMAGE = 'input.jpg'
+NAME_OF_OUTPUT_IMAGE = 'output.jpg'
 NO_OF_KMEANS_ITERATIONS = 10
 NO_OF_CLUSTERS = 3
 
 def main():
-    # without giving a flag, imread will take in only
-    # RGB channels and will leave transperancy out
-    inputImageMatrix = cv2.imread('input.jpg')
+    start = time()
+    inputImageMatrix = getInputImageMatrix(NAME_OF_INPUT_IMAGE)
     clusterCenters = pickRandomClusterCenters(inputImageMatrix, NO_OF_CLUSTERS)
-    kmeans(inputImageMatrix, NO_OF_KMEANS_ITERATIONS, NO_OF_CLUSTERS)
-    print(distanceBetweenPoints([2,2,4],[1,2,3]))
+    assert len(clusterCenters) == NO_OF_CLUSTERS, "No. of cluster centers has to be equal"
+    clusterMatrix, clusterCenters = kmeans(inputImageMatrix, clusterCenters, NO_OF_KMEANS_ITERATIONS)
+    print(clusterCenters)
+    saveOutputImage(clusterMatrix, clusterCenters, NAME_OF_OUTPUT_IMAGE)
+    end = time()
+    print("Time taken is {0}s".format((end - start)))
     return
-
-
 
 if __name__ == '__main__':
     main()
