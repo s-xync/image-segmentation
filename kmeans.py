@@ -1,3 +1,3 @@
-def kmeans(inputImageMatrix, noIterations, noClusters):
-    print(inputImageMatrix.shape)
+def kmeans(imageMatrix, noIterations, noClusters):
+    print(imageMatrix.shape)
     return
