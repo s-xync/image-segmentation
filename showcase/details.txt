@@ -1,0 +1,20 @@
+Image 1
+3 Clusters - 10 Iterations
+Initial Centers
+[2, 86, 158], [1, 27, 14], [3, 98, 161]
+Final Centers
+[12, 156, 216], [2, 64, 71], [247, 212, 168]
+
+Image 2
+3 Clusters - 10 Iterations
+Initial Centers
+[2, 68, 73], [24, 203, 254], [254, 216, 174]
+Final Centers
+[2, 65, 72], [12, 157, 216], [247, 212, 168]
+
+Image 3
+3 Clusters - 5 Iterations
+Initial Centers
+[16, 195, 255], [0, 107, 181], [255, 192, 124]
+Final Centers
+[16, 174, 231], [1, 81, 111], [248, 212, 167]
