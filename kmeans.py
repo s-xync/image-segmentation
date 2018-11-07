@@ -7,9 +7,9 @@ def kmeans(imageMatrix, clusterCenters, noIterations):
     height = imageMatrix.shape[0]
     width = imageMatrix.shape[1]
     for i in range(noIterations):
-        print("\n{0} iteration".format(i))
         clusterMatrix = calculateclusterMatrix(imageMatrix, clusterCenters, noClusters, height, width)
         clusterCenters = calculateClusterCenters(imageMatrix, clusterMatrix, noClusters, height, width)
+        print("{0} iteration".format((i+1)))#debug
         saveOutputImage(clusterMatrix, clusterCenters, "output{0}.jpg".format((i+1))) #debug
     return clusterMatrix, clusterCenters
 

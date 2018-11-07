@@ -5,8 +5,8 @@ from kmeans import kmeans
 
 NAME_OF_INPUT_IMAGE = 'input.jpg'
 NAME_OF_OUTPUT_IMAGE = 'output.jpg'
-NO_OF_KMEANS_ITERATIONS = 15
-NO_OF_CLUSTERS = 3
+NO_OF_KMEANS_ITERATIONS = 10
+NO_OF_CLUSTERS = 2
 
 def main():
     start = time()
