@@ -1,17 +1,16 @@
 import numpy as np
-from utils import distanceBetweenPoints
+from utils import distanceBetweenPoints, saveOutputImage
 import cv2
 
 def kmeans(imageMatrix, clusterCenters, noIterations):
     noClusters = len(clusterCenters)
     height = imageMatrix.shape[0]
     width = imageMatrix.shape[1]
-    print(clusterCenters)#debug
     for i in range(noIterations):
         print("\n{0} iteration".format(i))
         clusterMatrix = calculateclusterMatrix(imageMatrix, clusterCenters, noClusters, height, width)
         clusterCenters = calculateClusterCenters(imageMatrix, clusterMatrix, noClusters, height, width)
-        print(clusterCenters)#debug
+        saveOutputImage(clusterMatrix, clusterCenters, "output{0}.jpg".format((i+1))) #debug
     return clusterMatrix, clusterCenters
 
 def calculateclusterMatrix(imageMatrix, clusterCenters, noClusters, height, width):
@@ -34,7 +33,6 @@ def calculateClusterCenters(imageMatrix, clusterMatrix, noClusters, height, widt
         for j in range(width):
             clusterCenters[clusterMatrix[i][j]] += imageMatrix[i][j]
             noPixelsPerCluster[clusterMatrix[i][j]] += 1
-    print(noPixelsPerCluster) #debug
     for i in range(noClusters):
         clusterCenters[i] /= noPixelsPerCluster[i]
     return clusterCenters
