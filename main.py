@@ -1,19 +1,17 @@
 from time import time
-
-from utils import pickRandomClusterCenters, getInputImageMatrix, saveOutputImage
-from kmeans import kmeans
+from utils import getInputImageMatrix, saveOutputImage
+from clustering import kmeansClustering
 
 NAME_OF_INPUT_IMAGE = 'input.jpg'
 NAME_OF_OUTPUT_IMAGE = 'output.jpg'
 NO_OF_KMEANS_ITERATIONS = 10
-NO_OF_CLUSTERS = 2
+NO_OF_CLUSTERS = 3
+SUBTRACTIVE_CLUSTERING = False
 
 def main():
     start = time()
     inputImageMatrix = getInputImageMatrix(NAME_OF_INPUT_IMAGE)
-    clusterCenters = pickRandomClusterCenters(inputImageMatrix, NO_OF_CLUSTERS)
-    assert len(clusterCenters) == NO_OF_CLUSTERS, "No. of cluster centers has to be equal"
-    clusterMatrix, clusterCenters = kmeans(inputImageMatrix, clusterCenters, NO_OF_KMEANS_ITERATIONS)
+    clusterMatrix, clusterCenters = kmeansClustering(inputImageMatrix, NO_OF_CLUSTERS, NO_OF_KMEANS_ITERATIONS, SUBTRACTIVE_CLUSTERING)
     saveOutputImage(clusterMatrix, clusterCenters, NAME_OF_OUTPUT_IMAGE)
     end = time()
     print("Time taken is {0}s".format((end - start)))

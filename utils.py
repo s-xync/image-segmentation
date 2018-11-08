@@ -1,20 +1,12 @@
 import cv2
 import numpy as np
-from random import randint
 
-def pickRandomClusterCenters(imageMatrix, noClusters):
-    height = imageMatrix.shape[0]
-    width = imageMatrix.shape[1]
-    clusterCenters = []
-    for i in range(noClusters):
-        randomHeight = randint(0, height)
-        randomWidth = randint(0, width)
-        clusterCenters.append(imageMatrix[randomHeight][randomWidth])
-    return clusterCenters
-
-def distanceBetweenPoints(point1, point2):
+def distanceBetweenPoints(point1, point2, squared):
     # each point RGB channels and so, three dimensions
-    return round(((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2 + (point2[2] - point1[2]) ** 2) ** 0.5, 2)
+    if squared:
+        return round(((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2 + (point2[2] - point1[2]) ** 2), 2)
+    elif not squared:
+        return round(((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2 + (point2[2] - point1[2]) ** 2) ** 0.5, 2)
 
 def getInputImageMatrix(imageName):
     # without giving a flag, imread will take in only
