@@ -19,7 +19,7 @@ def calculateclusterMatrix(imageMatrix, clusterCenters, noClusters, height, widt
         for j in range(width):
             tempDistances = []
             for k in range(noClusters):
-                tempDistances.append(distanceBetweenPoints(imageMatrix[i][j], clusterCenters[k], False))
+                tempDistances.append(distanceBetweenPoints(imageMatrix[i][j], clusterCenters[k], True))
             clusterMatrix[i][j] = tempDistances.index(min(tempDistances))
     return clusterMatrix
 
@@ -46,32 +46,52 @@ def pickRandomClusterCenters(imageMatrix, noClusters, height, width):
     return clusterCenters
 
 def pickSubtractiveClusterCenters(imageMatrix, noClusters, height, width):
-    clusterCenters = []
+    clusterCentersPositions = []
     potentialMatrix = np.full((height, width), 0.)
     for i in range(height):
         for j in range(width):
             for k in range(height):
                 for l in range(width):
                     potentialMatrix[i][j] += exp(-1 * 4 * distanceBetweenPoints(imageMatrix[i][j], imageMatrix[k][l], True) / (15 ** 2))
-            print("{0}, {1}".format(i+1,j+1)) #debug
     for k in range(noClusters):
         maxPotentialHeight, maxPotentialWidth = np.unravel_index(potentialMatrix.argmax(), potentialMatrix.shape)
         maxPotential = potentialMatrix[maxPotentialHeight][maxPotentialWidth]
-        clusterCenters.append([maxPotentialHeight, maxPotentialWidth])
+        clusterCentersPositions.append([maxPotentialHeight, maxPotentialWidth])
         potentialMatrix[maxPotentialHeight][maxPotentialWidth] = 0.
         for i in range(height):
             for j in range(width):
-                if not [i, j] in clusterCenters:
+                if not [i, j] in clusterCentersPositions:
                     potentialMatrix[i][j] -= maxPotential * exp(-1 * 4 * distanceBetweenPoints(imageMatrix[i][j], imageMatrix[maxPotentialHeight][maxPotentialWidth], True) / (21 ** 2))
+    clusterCenters = []
+    for i in range(len(clusterCentersPositions)):
+        clusterCenters.append(imageMatrix[clusterCentersPositions[i][0]][clusterCentersPositions[i][1]])
     return clusterCenters
 
+def pickFarthestClusterCenters(imageMatrix, noClusters, height, width):
+	clusterCenters = []
+	distanceMatrix = np.full((height, width), 0.)
+	randomHeight = randint(0, height)
+	randomWidth = randint(0, width)
+	clusterCenters.append(imageMatrix[randomHeight][randomWidth])
+	for i in range(height):
+		for j in range(width):
+			distanceMatrix[i][j] = distanceBetweenPoints(imageMatrix[i][j], imageMatrix[randomHeight][randomWidth], True)
+	for k in range(noClusters-1):
+		maxDistanceHeight, maxDistanceWidth = np.unravel_index(distanceMatrix.argmax(), distanceMatrix.shape)
+		clusterCenters.append(imageMatrix[maxDistanceHeight][maxDistanceWidth])
+		for i in range(height):
+			for j in range(width):
+				distanceMatrix[i][j] = min(distanceMatrix[i,j] , distanceBetweenPoints(imageMatrix[i][j], imageMatrix[maxDistanceHeight][maxDistanceWidth], True))
+	return clusterCenters
 
-def kmeansClustering(imageMatrix, noClusters, noIterations, subtractive):
+def kmeansClustering(imageMatrix, noClusters, noIterations, clusteringType):
     height = imageMatrix.shape[0]
     width = imageMatrix.shape[1]
-    if subtractive:
+    if clusteringType == "SUBTRACTIVE":
         clusterCenters = pickSubtractiveClusterCenters(imageMatrix, noClusters, height, width)
-    elif not subtractive:
+    elif clusteringType == "RANDOM":
         clusterCenters = pickRandomClusterCenters(imageMatrix, noClusters, height, width)
+    elif clusteringType == "FARTHEST":
+        clusterCenters = pickFarthestClusterCenters(imageMatrix, noClusters, height, width)
     clusterMatrix, clusterCenters = kmeans(imageMatrix, clusterCenters, noIterations, height, width)
     return clusterMatrix, clusterCenters
