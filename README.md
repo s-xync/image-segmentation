@@ -45,4 +45,5 @@ In `clustering.py`, we have the important functions like `kmeans`, `calculateclu
 The above functions have been descriptively named so as to aid the understanding.  
 
 Project by [SaiKumar Immadi](https://github.com/s-xync), [Rahul Korthiwada](https://github.com/Korthiwada), [Shoaib Ahmed](https://github.com/ahmedshoaib)  
+
 Thanks!!
