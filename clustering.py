@@ -1,15 +1,15 @@
 import numpy as np
 from math import exp
-from utils import pickRandomClusterCenters, distanceBetweenPoints, saveOutputImage
+from utils import distanceBetweenPoints, saveOutputImage
 from random import randint
 import cv2
 
 def kmeans(imageMatrix, clusterCenters, noIterations, height, width):
     noClusters = len(clusterCenters)
     for i in range(noIterations):
-        print("{0} iteration".format((i+1)))#debug
-        saveOutputImage(clusterMatrix, clusterCenters, "output{0}.jpg".format((i+1))) #debug
+        print("{0} iteration".format((i+1))) #debug
         clusterMatrix = calculateclusterMatrix(imageMatrix, clusterCenters, noClusters, height, width)
+        saveOutputImage(clusterMatrix, clusterCenters, "output{0}.jpg".format((i+1))) #debug
         clusterCenters = calculateClusterCenters(imageMatrix, clusterMatrix, noClusters, height, width)
     return clusterMatrix, clusterCenters
 
@@ -53,6 +53,7 @@ def pickSubtractiveClusterCenters(imageMatrix, noClusters, height, width):
             for k in range(height):
                 for l in range(width):
                     potentialMatrix[i][j] += exp(-1 * 4 * distanceBetweenPoints(imageMatrix[i][j], imageMatrix[k][l], True) / (15 ** 2))
+            print("{0}, {1}".format(i+1,j+1)) #debug
     for k in range(noClusters):
         maxPotentialHeight, maxPotentialWidth = np.unravel_index(potentialMatrix.argmax(), potentialMatrix.shape)
         maxPotential = potentialMatrix[maxPotentialHeight][maxPotentialWidth]
@@ -70,8 +71,7 @@ def kmeansClustering(imageMatrix, noClusters, noIterations, subtractive):
     width = imageMatrix.shape[1]
     if subtractive:
         clusterCenters = pickSubtractiveClusterCenters(imageMatrix, noClusters, height, width)
-        clusterMatrix, clusterCenters = kmeans(imageMatrix, clusterCenters, noIterations, height, width)
     elif not subtractive:
         clusterCenters = pickRandomClusterCenters(imageMatrix, noClusters, height, width)
-        clusterMatrix, clusterCenters = kmeans(imageMatrix, clusterCenters, noIterations, height, width)
+    clusterMatrix, clusterCenters = kmeans(imageMatrix, clusterCenters, noIterations, height, width)
     return clusterMatrix, clusterCenters

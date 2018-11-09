@@ -2,7 +2,7 @@ from time import time
 from utils import getInputImageMatrix, saveOutputImage
 from clustering import kmeansClustering
 
-NAME_OF_INPUT_IMAGE = 'input.jpg'
+NAME_OF_INPUT_IMAGE = 'input3.png'
 NAME_OF_OUTPUT_IMAGE = 'output.jpg'
 NO_OF_KMEANS_ITERATIONS = 10
 NO_OF_CLUSTERS = 3
